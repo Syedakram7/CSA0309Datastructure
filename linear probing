@@ -1,0 +1,82 @@
+#include <stdio.h>
+#define SIZE 10
+
+int hashTable[SIZE];
+
+void init() {
+    for (int i = 0; i < SIZE; i++)
+        hashTable[i] = -1;
+}
+
+int hash(int key) {
+    return key % SIZE;
+}
+
+void insert(int key) {
+    int index = hash(key);
+    int i = 0;
+    while (hashTable[(index + i) % SIZE] != -1 && i < SIZE) {
+        i++;
+    }
+    if (i == SIZE) {
+        printf("Hash table is full\n");
+        return;
+    }
+    hashTable[(index + i) % SIZE] = key;
+}
+
+int search(int key) {
+    int index = hash(key);
+    int i = 0;
+    while (hashTable[(index + i) % SIZE] != -1 && i < SIZE) {
+        if (hashTable[(index + i) % SIZE] == key)
+            return (index + i) % SIZE;
+        i++;
+    }
+    return -1;
+}
+
+void display() {
+    printf("Hash Table:\n");
+    for (int i = 0; i < SIZE; i++) {
+        if (hashTable[i] != -1)
+            printf("%d -> %d\n", i, hashTable[i]);
+        else
+            printf("%d -> NULL\n", i);
+    }
+}
+
+int main() {
+    int choice, key;
+    init();
+    do {
+        printf("\n1. Insert\n2. Search\n3. Display\n4. Exit\nEnter choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Enter key to insert: ");
+                scanf("%d", &key);
+                insert(key);
+                break;
+            case 2:
+                printf("Enter key to search: ");
+                scanf("%d", &key);
+                int pos;
+                pos = search(key);
+                if (pos != -1)
+                    printf("Key found at index %d\n", pos);
+                else
+                    printf("Key not found\n");
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 4);
+    return 0;
+}
